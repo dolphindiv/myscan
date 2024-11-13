@@ -1,3 +1,2 @@
 # myscan
-myscan debug
-debug into myscan source code
+myscan debug--debug into myscan source code by myself
