@@ -1,0 +1,11 @@
+# -*- coding: UTF-8 -*-
+import re
+script="javascript:alert(111)/*code*/aaa/*code*/"
+annotations=[]
+annotation_positions=[]
+annotation_asterisk = re.finditer(r'(/\*[\s\S]*?\*/)', script, re.S)  
+#print annotation_asterisk
+for x in annotation_asterisk:
+	annotations.append((x.group(1),x.start(1)))
+	annotation_positions.append((x.start(), x.start() + len(x.group()), "/*"))
+	print annotation_positions
