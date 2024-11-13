@@ -1,0 +1,14 @@
+# -*- coding: UTF-8 -*-
+import re
+def extractScripts(response, xsschecker):
+    scripts = []
+    matches = re.finditer(r'(?s)<script.*?>(.*?)</script>', response.lower())
+    for match in matches:
+        if xsschecker in match.group(1):
+            scripts.append((match.group(1), match.start(1)))
+    return scripts
+def main():
+	result=extractScripts("aaaa<script>javascript:alert(111)/*code*/aaa/*code*/</script>","javascript:alert(111)")
+	print result
+if __name__ == "__main__":
+    main()  # 调用main函数
