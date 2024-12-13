@@ -3,7 +3,8 @@
 import re
 script_checkable="aaaa<script>/*code*/aaaa/*code*/javascript:alert(111)/*code*/</script>aaaa<script>/*code*/aaaa/*code*/javascript:alert(222)/*code*/</script>"
 xsschecker="javascript"
-reflections=2
+reflections=3
+clean_response=script_checkable
 result=[]
 position_and_context = {}
 environment_details = {}
@@ -62,5 +63,5 @@ print(position_and_context)
 if len(position_and_context) < reflections:
         attribute_context = re.finditer(r'<[^>]*?(%s)[^>]*?>' % xsschecker, clean_response)
         for occurence in attribute_context:
-            print(occurence.group())
+            print(occurence.group(1))
             
