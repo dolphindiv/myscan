@@ -3,6 +3,7 @@
 import re
 script_checkable="aaaa<script>/*code*/aaaa/*code*/javascript:alert(111)/*code*/</script>aaaa<script>/*code*/aaaa/*code*/javascript:alert(222)/*code*/</script>"
 xsschecker="javascript"
+reflections=2
 result=[]
 position_and_context = {}
 environment_details = {}
@@ -47,11 +48,19 @@ for script, script_start in extractScripts(script_checkable, xsschecker):
                     break
                 elif currentChar in (')', ']', '}', '}'):
                     break
-            print (annotation_positions)
-            print (thisPosition)
-            print (script)
+            print ("annotation_positions: %s"%annotation_positions)
+            print ("xsschecker absolute postion: %s"%thisPosition)
+            print ("script: %s"%script)
             print (position_and_context[thisPosition])
             print(startwith)
             print(environment_details[thisPosition])
+            #print(environment_details[thisPosition]['details']['quote'])
+            #print(occurence.group())
+            print("len of occurence: %s"%len(occurence.group()))
+            #以上是script情况
+print(position_and_context)
+if len(position_and_context) < reflections:
+        attribute_context = re.finditer(r'<[^>]*?(%s)[^>]*?>' % xsschecker, clean_response)
+        for occurence in attribute_context:
             print(occurence.group())
-            print(len(occurence.group()))
+            
