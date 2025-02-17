@@ -9,6 +9,58 @@ result=[]
 position_and_context = {}
 environment_details = {}
 
+def extractScripts(response, xsschecker):
+    scripts = []
+    matches = re.finditer(r'(?s)<script.*?>(.*?)</script>', response.lower())
+    for match in matches:
+        if xsschecker in match.group(1):
+            scripts.append((match.group(1), match.start(1)))
+    return scripts
+print(extractScripts(script_checkable, xsschecker))
+for script, script_start in extractScripts(script_checkable, xsschecker):
+	# 找到注释位置
+    annotation_positions = []
+    annotation_asterisk = re.finditer(r'(/\*[\s\S]*?\*/)', script, re.S)  # 星号
+    for x in annotation_asterisk:
+        annotation_positions.append((x.start(), x.start() + len(x.group()), "/*"))
+    annotation_backslash = re.finditer(r'(//.*?)$', script, re.M)  # 正斜杠
+    for x in annotation_backslash:
+        annotation_positions.append((x.start(), x.start() + len(x.group()), "//"))
+    occurences = re.finditer(r'(%s.*?)$' % xsschecker, script, re.M)
+    if occurences:		
+        for occurence in occurences:
+            print(occurence.group(1))
+            thisPosition = occurence.start(1) + script_start
+            position_and_context[thisPosition] = 'script'
+            environment_details[thisPosition] = {}
+            startwith = script[int(thisPosition) - 2:int(thisPosition)]
+            environment_details[thisPosition]['details'] = {}
+            environment_details[thisPosition]['details']["startwith"] = startwith
+            environment_details[thisPosition]['details']['annotation'] = ''
+			# 匹配返回值是否在注释里
+            for x, y, z in annotation_positions:
+                if x < thisPosition and thisPosition < y:
+                    environment_details[thisPosition]['details']["annotation"] = z
+                    break
+            for i in range(len(occurence.group())):
+                currentChar = occurence.group()[i]
+                print(currentChar)
+                if currentChar in ('/', '\'', '`', '"'):                    
+                    environment_details[thisPosition]['details']['quote'] = currentChar
+                    break
+                elif currentChar in (')', ']', '}', '}'):
+                    break
+            print ("annotation_positions: %s"%annotation_positions)
+            print ("xsschecker absolute postion: %s"%thisPosition)
+            print ("script: %s"%script)
+            print (position_and_context[thisPosition])
+            print(startwith)
+            print(environment_details[thisPosition])
+            #print(environment_details[thisPosition]['details']['quote'])
+            #print(occurence.group())
+            print("len of occurence: %s"%len(occurence.group()))
+            #以上是script情况
+print(position_and_context)
 if len(position_and_context) < reflections:
         attribute_context = re.finditer(r'<[^>]*?(%s)[^>]*?>' % xsschecker, clean_response)
         for occurence in attribute_context:
