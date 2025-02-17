@@ -48,7 +48,7 @@ for script, script_start in extractScripts(script_checkable, xsschecker):
                     break
             for i in range(len(occurence.group())):
                 currentChar = occurence.group()[i]
-                print(currentChar)
+                #print(currentChar)
                 if currentChar in ('/', '\'', '`', '"'):                    
                     environment_details[thisPosition]['details']['quote'] = currentChar
                     break
