@@ -37,7 +37,7 @@ if len(position_and_context) < reflections:
                     environment_details[thisPosition]['details']['startwith'] = startwith
                     environment_details[thisPosition]['details'] = {'tag': tag, 'type': Type, 'quote': quote,
                                                                     'value': value, 'name': name}
-    if len(position_and_context) < reflections:
+if len(position_and_context) < reflections:
         html_context = re.finditer(xsschecker, clean_response)
         for occurence in html_context:
             thisPosition = occurence.start()
@@ -47,7 +47,7 @@ if len(position_and_context) < reflections:
                 environment_details[thisPosition]['details'] = {}
                 startwith = clean_response[int(thisPosition) - 2:int(thisPosition)]
                 environment_details[thisPosition]['details']['startwith'] = startwith
-    if len(position_and_context) < reflections:
+if len(position_and_context) < reflections:
         comment_context = re.finditer(r'<!--[\s\S]*?(%s)[\s\S]*?-->' % xsschecker, response)
         for occurence in comment_context:
             thisPosition = occurence.start(1)
