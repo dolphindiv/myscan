@@ -8,6 +8,8 @@ result=[]
 position_and_context = {}
 environment_details = {}
 
+attribute_context={}
+
 response="aaaa<script>/*code*/aaaa/*code*/javascript:alert(111)/*code*/</script>aaaa<script>/*code*/aaaa/*code*/javascript:alert(222)/*code*/</script><a href='javascript:alert(1)'>click</a><!--aaaabbbccccjavascript:alert(111)-->"
 clean_response = re.sub(r'<!--[.\s\S]*?-->', '', response)
 script_checkable=clean_response
@@ -73,9 +75,12 @@ if len(position_and_context) < reflections:
         attribute_context = re.finditer(r'<[^>]*?(%s)[^>]*?>' % xsschecker, clean_response)
         for occurence in attribute_context:
             match = occurence.group(0)
+            print(match)
             thisPosition = occurence.start(1)
             parts = re.split(r'\s', match)
+            print(parts)
             tag = parts[0][1:]
+            print(tag)
             for part in parts:
                 if xsschecker in part:
                     Type, quote, name, value = '', '', '', ''
