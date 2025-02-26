@@ -8,7 +8,7 @@ result=[]
 position_and_context = {}
 environment_details = {}
 
-response="aaaa<script>/*code*/aaaa/*code*/javascript:alert(111)/*code*/</script>aaaa<script>/*code*/aaaa/*code*/javascript:alert(222)/*code*/</script><!--aaaabbbccccjavascript:alert(111)-->"
+response="aaaa<script>/*code*/aaaa/*code*/javascript:alert(111)/*code*/</script>aaaa<script>/*code*/aaaa/*code*/javascript:alert(222)/*code*/</script><a href='javascript:alert(1)'>click</a><!--aaaabbbccccjavascript:alert(111)-->"
 clean_response = re.sub(r'<!--[.\s\S]*?-->', '', response)
 script_checkable=clean_response
 
