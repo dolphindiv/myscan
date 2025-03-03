@@ -1,9 +1,10 @@
+
 #!/usr/bin/python
 # Write Python 3 code in this online editor and run it.
 import re
 #script_checkable="aaaa<script>/*code*/aaaa/*code*/javascript:alert(111)/*code*/</script>aaaa<script>/*code*/aaaa/*code*/javascript:alert(222)/*code*/</script>"
 xsschecker="javascript"
-reflections=3
+reflections=4
 result=[]
 position_and_context = {}
 environment_details = {}
@@ -93,6 +94,8 @@ if len(position_and_context) < reflections:
                             Type = 'value'
                         name = name_and_value[0]
                         value = name_and_value[1].rstrip('>').rstrip(quote).lstrip(quote)
+                        print(name)
+                        print(value)
                     else:
                         Type = 'flag'
                     environment_details[thisPosition] = {}
@@ -102,17 +105,22 @@ if len(position_and_context) < reflections:
                     environment_details[thisPosition]['details']['startwith'] = startwith
                     environment_details[thisPosition]['details'] = {'tag': tag, 'type': Type, 'quote': quote,
                                                                     'value': value, 'name': name}
+                    print(environment_details)
+                    print(position_and_context)
 
 if len(position_and_context) < reflections:
-        html_context = re.finditer(xsschecker, clean_response)
+        html_context = re.finditer(xsschecker, clean_response)        
         for occurence in html_context:
             thisPosition = occurence.start()
+            print(occurence)
+            print(thisPosition)
             if thisPosition not in position_and_context:
                 position_and_context[occurence.start()] = 'html'
                 environment_details[thisPosition] = {}
                 environment_details[thisPosition]['details'] = {}
                 startwith = clean_response[int(thisPosition) - 2:int(thisPosition)]
                 environment_details[thisPosition]['details']['startwith'] = startwith
+                print(environment_details)
 
 if len(position_and_context) < reflections:
         comment_context = re.finditer(r'<!--[\s\S]*?(%s)[\s\S]*?-->' % xsschecker, response)
